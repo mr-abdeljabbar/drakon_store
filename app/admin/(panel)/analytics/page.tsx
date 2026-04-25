@@ -24,11 +24,17 @@ export default function AnalyticsPage() {
   const [data, setData] = useState<AnalyticsData | null>(null)
   const [adSpend, setAdSpend] = useState('')
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     fetch('/api/analytics')
       .then((r) => r.json())
-      .then((d) => { setData(d); setLoading(false) })
+      .then((d) => {
+        if (d.error) { setError(d.error); setLoading(false); return }
+        setData(d)
+        setLoading(false)
+      })
+      .catch((e) => { setError(String(e)); setLoading(false) })
   }, [])
 
   const computedCPL = adSpend && data?.overview.total
@@ -37,6 +43,14 @@ export default function AnalyticsPage() {
 
   if (loading) {
     return <div className="text-center py-20 text-drakon-muted font-montserrat text-sm">Loading...</div>
+  }
+  if (error) {
+    return (
+      <div className="text-center py-20">
+        <p className="font-montserrat text-sm text-red-400 mb-2">Failed to load analytics</p>
+        <pre className="font-mono text-xs text-drakon-muted text-left max-w-xl mx-auto bg-surface-mid border border-drakon-border p-4 overflow-auto">{error}</pre>
+      </div>
+    )
   }
   if (!data) return null
 
