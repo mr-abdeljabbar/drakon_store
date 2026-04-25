@@ -7,7 +7,8 @@ export async function GET() {
   const results: Record<string, unknown> = {}
 
   try {
-    results.count = await prisma.lead.count()
+    results.leads = await prisma.lead.count()
+    results.products = await prisma.product.count()
     results.db = 'connected'
   } catch (err) {
     return NextResponse.json({ step: 'count', error: String(err) }, { status: 500 })
