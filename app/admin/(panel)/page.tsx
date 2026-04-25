@@ -1,13 +1,8 @@
 export const dynamic = 'force-dynamic'
 
-import dynamic from 'next/dynamic'
 import { StatsCard } from '@/components/admin/StatsCard'
+import { AnalyticsChartWrapper } from '@/components/admin/AnalyticsChartWrapper'
 import { prisma } from '@/lib/prisma'
-
-const AnalyticsChart = dynamic(
-  () => import('@/components/admin/AnalyticsChart').then((m) => m.AnalyticsChart),
-  { ssr: false, loading: () => <div className="h-64 bg-surface-mid border border-drakon-border animate-pulse" /> }
-)
 
 async function getAnalytics() {
   const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
@@ -79,7 +74,7 @@ export default async function Page() {
 
       {/* Charts */}
       <div className="mb-8">
-        <AnalyticsChart
+        <AnalyticsChartWrapper
           daily={data.daily}
           bySource={data.sourceMap}
           byCampaign={data.byCampaign}
