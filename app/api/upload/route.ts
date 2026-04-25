@@ -1,6 +1,11 @@
 import { NextResponse } from 'next/server'
-import { writeFile, mkdir } from 'fs/promises'
-import path from 'path'
+import { v2 as cloudinary } from 'cloudinary'
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key:    process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+})
 
 export async function POST(request: Request) {
   const formData = await request.formData()
@@ -17,14 +22,23 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Max file size is 3 MB' }, { status: 400 })
   }
 
-  const bytes = await file.arrayBuffer()
-  const buffer = Buffer.from(bytes)
-  const ext = file.name.split('.').pop()
-  const filename = `${Date.now()}.${ext}`
-  const dir = path.join(process.cwd(), 'public', 'products')
+  try {
+    const bytes = await file.arrayBuffer()
+    const buffer = Buffer.from(bytes)
 
-  await mkdir(dir, { recursive: true })
-  await writeFile(path.join(dir, filename), buffer)
+    const result = await new Promise<{ secure_url: string }>((resolve, reject) => {
+      cloudinary.uploader.upload_stream(
+        { folder: 'drakon/products', resource_type: 'image' },
+        (err, res) => {
+          if (err || !res) reject(err ?? new Error('Upload failed'))
+          else resolve(res as { secure_url: string })
+        }
+      ).end(buffer)
+    })
 
-  return NextResponse.json({ url: `/products/${filename}` })
+    return NextResponse.json({ url: result.secure_url })
+  } catch (err) {
+    console.error('[upload]', err)
+    return NextResponse.json({ error: String(err) }, { status: 500 })
+  }
 }
