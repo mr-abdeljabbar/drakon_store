@@ -20,6 +20,9 @@
     "react-dom": "^18.2.0",
     "recharts": "^2.12.2"
   },
+  "prisma": {
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
+  },
   "devDependencies": {
     "@types/node": "^20.11.28",
     "@types/react": "^18.2.66",
