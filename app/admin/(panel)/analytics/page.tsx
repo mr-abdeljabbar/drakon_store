@@ -1,7 +1,10 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { DailyChart, CampaignBarChart } from '@/components/admin/AnalyticsChart'
+import dynamic from 'next/dynamic'
+
+const DailyChart     = dynamic(() => import('@/components/admin/AnalyticsChart').then((m) => m.DailyChart),     { ssr: false })
+const CampaignBarChart = dynamic(() => import('@/components/admin/AnalyticsChart').then((m) => m.CampaignBarChart), { ssr: false })
 
 interface AnalyticsData {
   overview: {

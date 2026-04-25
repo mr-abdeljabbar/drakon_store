@@ -1,8 +1,13 @@
 export const dynamic = 'force-dynamic'
 
+import dynamic from 'next/dynamic'
 import { StatsCard } from '@/components/admin/StatsCard'
-import { AnalyticsChart } from '@/components/admin/AnalyticsChart'
 import { prisma } from '@/lib/prisma'
+
+const AnalyticsChart = dynamic(
+  () => import('@/components/admin/AnalyticsChart').then((m) => m.AnalyticsChart),
+  { ssr: false, loading: () => <div className="h-64 bg-surface-mid border border-drakon-border animate-pulse" /> }
+)
 
 async function getAnalytics() {
   const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
@@ -23,8 +28,8 @@ async function getAnalytics() {
       select: { id: true, name: true, phone: true, city: true, product_name: true, status: true, source: true, campaign: true, quality_score: true, total_price: true, created_at: true },
     }),
     prisma.$queryRaw<{ day: string; count: bigint }[]>`
-      SELECT strftime('%Y-%m-%d', created_at) as day, COUNT(*) as count
-      FROM "Lead" WHERE created_at >= ${thirtyDaysAgo.toISOString()}
+      SELECT TO_CHAR(created_at, 'YYYY-MM-DD') as day, COUNT(*) as count
+      FROM "Lead" WHERE created_at >= ${thirtyDaysAgo}::timestamptz
       GROUP BY day ORDER BY day ASC
     `,
   ])
