@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// source: facebook | instagram | tiktok | direct
+// status: new | sent | accepted | rejected
+// quality_score: high | medium | low | spam
+
+model Product {
+  id             String   @id @default(cuid())
+  slug           String   @unique
+  name           String
+  subtitle       String   @default("")
+  description    String
+  price          Float
+  original_price Float
+  category       String   @default("beard")
+  badge          String   @default("")
+  image_url      String   @default("")
+  features       String   @default("[]")
+  ingredients    String   @default("[]")
+  active         Boolean  @default(true)
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+}
+
+model Lead {
+  id            String   @id @default(cuid())
+  name          String
+  phone         String
+  city          String
+  address       String?
+  product_name  String
+  quantity      Int      @default(1)
+  total_price   Float
+  source        String   @default("direct")
+  campaign      String?
+  fbclid        String?
+  status        String   @default("new")
+  quality_score String   @default("medium")
+  notes         String?
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+
+  @@index([status])
+  @@index([source])
+  @@index([created_at])
+  @@index([phone])
+}
