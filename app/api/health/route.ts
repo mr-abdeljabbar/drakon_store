@@ -33,5 +33,12 @@ export async function GET() {
     return NextResponse.json({ step: 'groupBy', error: String(err) }, { status: 500 })
   }
 
+  results.env = {
+    DATABASE_URL:    !!process.env.DATABASE_URL,
+    ADMIN_EMAIL:     process.env.ADMIN_EMAIL ?? 'NOT SET',
+    ADMIN_PASSWORD:  process.env.ADMIN_PASSWORD ? `set (${process.env.ADMIN_PASSWORD.length} chars)` : 'NOT SET',
+    ADMIN_SECRET:    !!process.env.ADMIN_SECRET,
+  }
+
   return NextResponse.json({ ok: true, ...results })
 }
