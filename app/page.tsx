@@ -6,13 +6,14 @@ import { ProductsGrid } from '@/components/store/ProductsGrid'
 import { HeroImageBox } from '@/components/store/HeroImageBox'
 import { Footer } from '@/components/store/Footer'
 import { DEFAULT_PRODUCTS, parseFeatures, parseIngredients } from '@/lib/products'
+import type { CategorySlug } from '@/lib/categories'
 import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
 
 async function getProducts() {
   const count = await prisma.product.count()
   if (count === 0) await prisma.product.createMany({ data: DEFAULT_PRODUCTS })
-  return prisma.product.findMany({ where: { active: true }, orderBy: { created_at: 'asc' } })
+  return prisma.product.findMany({ where: { active: true }, orderBy: { created_at: 'asc' }, take: 3 })
 }
 
 export default async function HomePage() {
@@ -25,7 +26,7 @@ export default async function HomePage() {
     description_fr: '',
     price: p.price,
     original_price: p.original_price,
-    category: p.category as 'beard' | 'hair' | 'skin',
+    category: p.category as CategorySlug,
     badge: p.badge || undefined,
     image_url: p.image_url || undefined,
     features: parseFeatures(p.features),
@@ -50,6 +51,15 @@ export default async function HomePage() {
           </div>
 
           <ProductsGrid products={products} />
+
+          <div className="text-center mt-10">
+            <Link
+              href="/products"
+              className="inline-block border border-gold text-gold font-cairo font-bold px-10 py-3 hover:bg-gold hover:text-surface-base transition-colors"
+            >
+              عرض جميع المنتجات
+            </Link>
+          </div>
         </section>
 
         {/* Gold separator */}
@@ -59,9 +69,9 @@ export default async function HomePage() {
         <section className="max-w-6xl mx-auto px-4 py-16">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
             {[
-              { icon: '🌿', title: 'مكونات طبيعية', desc: 'نختار أجود المكونات الطبيعية المغربية الأصيلة' },
-              { icon: '🔬', title: 'مختبر درماتولوجياً', desc: 'تركيبات مجربة ومعتمدة طبياً لسلامة بشرتك' },
-              { icon: '🚀', title: 'توصيل سريع', desc: 'نوصل لجميع مدن المغرب خلال 24-48 ساعة' },
+              { icon: '⚡', title: 'جودة احترافية', desc: 'تركيبات مختارة بعناية لنتائج فعّالة' },
+              { icon: '🛡️', title: 'ثقة مضمونة', desc: 'منتجات آمنة ومجربة للاستعمال اليومي' },
+              { icon: '🚀', title: 'توصيل سريع', desc: '24-48 ساعة لجميع مدن المغرب' },
             ].map((item) => (
               <div key={item.title} className="p-6 bg-surface-mid border border-drakon-border text-right">
                 <div className="text-3xl mb-3">{item.icon}</div>

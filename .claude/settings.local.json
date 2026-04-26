@@ -42,7 +42,17 @@
       "Bash(git remote *)",
       "Bash(git add *)",
       "Bash(git rm *)",
-      "Bash(git commit -m ' *)"
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "Bash(netlify --version)",
+      "PowerShell(npm install *)",
+      "PowerShell(npx netlify --version 2>&1)",
+      "Bash(npm list *)",
+      "Bash(pkill -f \"next dev\")",
+      "Bash(echo \"Server PID: $!\")",
+      "Read(//c/Users/abdel/**)",
+      "Bash(taskkill *)",
+      "PowerShell(Stop-Process *)"
     ]
   }
 }

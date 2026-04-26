@@ -3,12 +3,11 @@
 import { useState } from 'react'
 import { ProductCard } from './ProductCard'
 import { Product } from '@/lib/products'
+import { CATEGORIES } from '@/lib/categories'
 
 const TABS = [
-  { label: 'الكل',   value: 'all' },
-  { label: 'اللحية', value: 'beard' },
-  { label: 'الشعر',  value: 'hair' },
-  { label: 'البشرة', value: 'skin' },
+  { label: 'الكل', value: 'all', icon: '' },
+  ...CATEGORIES.map((c) => ({ label: c.ar, value: c.slug, icon: c.icon })),
 ]
 
 interface Props {
@@ -30,12 +29,13 @@ export function ProductsGrid({ products }: Props) {
           <button
             key={tab.value}
             onClick={() => setActive(tab.value)}
-            className={`font-tajawal text-sm px-4 py-2 whitespace-nowrap transition-colors ${
+            className={`font-tajawal text-sm px-4 py-2 whitespace-nowrap transition-colors flex items-center gap-1.5 ${
               active === tab.value
                 ? 'bg-gold text-surface-base font-bold'
                 : 'border border-drakon-border text-drakon-muted hover:border-gold hover:text-gold'
             }`}
           >
+            {tab.icon && <span className="text-xs">{tab.icon}</span>}
             {tab.label}
           </button>
         ))}

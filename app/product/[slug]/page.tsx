@@ -7,6 +7,8 @@ import { Footer } from '@/components/store/Footer'
 import { OrderForm } from '@/components/store/OrderForm'
 import { prisma } from '@/lib/prisma'
 import { parseFeatures, parseIngredients, DEFAULT_PRODUCTS } from '@/lib/products'
+import { getCategoryBySlug } from '@/lib/categories'
+import type { CategorySlug } from '@/lib/categories'
 import { ProductCard } from '@/components/store/ProductCard'
 import { MobileCartBar } from '@/components/store/MobileCartBar'
 import { QuantityProvider } from '@/components/store/QuantityContext'
@@ -47,7 +49,7 @@ export default async function ProductPage({ params }: Props) {
   const otherProducts = otherDbProducts.map((p) => ({
     slug: p.slug, name: p.name, name_fr: '', description: p.description,
     description_fr: '', price: p.price, original_price: p.original_price,
-    category: p.category as 'beard' | 'hair' | 'skin',
+    category: p.category as CategorySlug,
     badge: p.badge || undefined, image_url: p.image_url || undefined,
     features: parseFeatures(p.features), ingredients: parseIngredients(p.ingredients),
   }))
@@ -162,7 +164,7 @@ export default async function ProductPage({ params }: Props) {
               ) : (
                 <>
                   <div className="text-9xl opacity-20">
-                    {product.category === 'beard' ? '🧔' : product.category === 'hair' ? '💈' : '✨'}
+                    {getCategoryBySlug(product.category)?.icon ?? '✨'}
                   </div>
                   <div className="absolute inset-0 flex flex-col items-center justify-center">
                     <p className="font-montserrat font-bold text-2xl tracking-widest text-gold/40 uppercase">DRAKON</p>
@@ -174,7 +176,7 @@ export default async function ProductPage({ params }: Props) {
 
             {/* Order form */}
             <div id="order-form">
-              <OrderForm product={{ slug: product.slug, name: product.name, price: product.price, original_price: product.original_price, category: product.category as 'beard' | 'hair' | 'skin', badge: product.badge || undefined, features: features, ingredients: ingredients, description: product.description, name_fr: '', description_fr: '' }} />
+              <OrderForm product={{ slug: product.slug, name: product.name, price: product.price, original_price: product.original_price, category: product.category as CategorySlug, badge: product.badge || undefined, features: features, ingredients: ingredients, description: product.description, name_fr: '', description_fr: '' }} />
             </div>
           </div>
         </div>

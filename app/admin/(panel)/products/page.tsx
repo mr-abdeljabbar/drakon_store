@@ -4,6 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { prisma } from '@/lib/prisma'
 import { DEFAULT_PRODUCTS } from '@/lib/products'
+import { getCategoryBySlug } from '@/lib/categories'
 
 async function getProducts() {
   const count = await prisma.product.count()
@@ -36,7 +37,7 @@ export default async function ProductsPage() {
                 <Image src={p.image_url} alt={p.name} fill sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" className="object-contain p-4" />
               ) : (
                 <span className="text-5xl opacity-20">
-                  {p.category === 'beard' ? '🧔' : p.category === 'hair' ? '💈' : '✨'}
+                  {getCategoryBySlug(p.category)?.icon ?? '✨'}
                 </span>
               )}
               {p.badge && (
@@ -51,11 +52,18 @@ export default async function ProductsPage() {
               )}
             </div>
             <div className="p-4">
-              <p className="font-montserrat text-xs text-drakon-muted uppercase tracking-widest mb-1">{p.category}</p>
+              <p className="font-montserrat text-xs text-drakon-muted uppercase tracking-widest mb-1">
+                {getCategoryBySlug(p.category)?.en ?? p.category}
+              </p>
               <h3 className="font-montserrat font-bold text-drakon-text text-sm mb-2 leading-tight">{p.name}</h3>
               <div className="flex items-center justify-between">
                 <span className="font-montserrat font-bold text-gold">{p.price} MAD</span>
-                <span className="font-montserrat text-xs text-gold group-hover:underline">Edit →</span>
+                <span className="inline-flex items-center gap-1.5 font-montserrat text-xs font-semibold text-gold border border-gold/40 px-3 py-1.5 rounded-sm bg-gold/5 group-hover:bg-gold group-hover:text-surface-base transition-all duration-200 shadow-sm shadow-gold/10 group-hover:shadow-gold/25">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5">
+                    <path d="M2.695 14.763l-1.262 3.154a.5.5 0 00.65.65l3.155-1.262a4 4 0 001.343-.885L17.5 5.5a2.121 2.121 0 00-3-3L3.58 13.42a4 4 0 00-.885 1.343z" />
+                  </svg>
+                  Edit
+                </span>
               </div>
             </div>
           </Link>

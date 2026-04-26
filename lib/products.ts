@@ -9,7 +9,7 @@ export interface Product {
   description_fr: string
   price: number
   original_price: number
-  category: 'beard' | 'hair' | 'skin'
+  category: 'skin' | 'beard' | 'hair' | 'oral' | 'control' | 'supplements'
   badge?: string
   image_url?: string
   features: Feature[]

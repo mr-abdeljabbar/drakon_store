@@ -113,7 +113,7 @@ export default function FaqPage() {
                 فريقنا جاهز للمساعدة. تواصل معنا مباشرة وسنجيبك في أقرب وقت.
               </p>
               <a
-                href="https://wa.me/212600000000"
+                href="https://wa.me/2120770757182"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-3 bg-gold text-surface-base font-cairo font-bold px-8 py-3 hover:bg-gold-light transition-colors"

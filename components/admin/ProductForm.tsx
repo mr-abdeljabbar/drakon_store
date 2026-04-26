@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
+import { CATEGORIES } from '@/lib/categories'
 
 interface Feature { icon: string; title: string; desc: string }
 interface Ingredient { name: string; desc: string }
@@ -163,9 +164,9 @@ export function ProductForm({ product }: Props) {
           <div>
             <label className={labelClass}>Category *</label>
             <select value={category} onChange={(e) => setCategory(e.target.value)} className={`${inputClass} cursor-pointer`}>
-              <option value="beard">Beard</option>
-              <option value="hair">Hair</option>
-              <option value="skin">Skin</option>
+              {CATEGORIES.map((c) => (
+                <option key={c.slug} value={c.slug}>{c.en} — {c.ar}</option>
+              ))}
             </select>
           </div>
         </div>

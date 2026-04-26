@@ -1,12 +1,15 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { Product } from '@/lib/products'
+import { getCategoryBySlug } from '@/lib/categories'
 
 interface Props {
   product: Product
 }
 
 export function ProductCard({ product }: Props) {
+  const cat = getCategoryBySlug(product.category)
+
   return (
     <div className="group bg-surface-mid border border-drakon-border hover:border-gold transition-colors flex flex-col">
       {/* Clickable image area */}
@@ -22,7 +25,7 @@ export function ProductCard({ product }: Props) {
             />
           ) : (
             <div className="text-6xl opacity-30">
-              {product.category === 'beard' ? '🧔' : product.category === 'hair' ? '💈' : '✨'}
+              {cat?.icon ?? '✨'}
             </div>
           )}
           {product.badge && (
@@ -36,7 +39,7 @@ export function ProductCard({ product }: Props) {
       {/* Info */}
       <div className="p-4 text-right flex flex-col flex-1">
         <p className="font-cairo text-xs text-drakon-muted mb-1">
-          {product.category === 'beard' ? 'لحية' : product.category === 'hair' ? 'شعر' : 'بشرة'}
+          {cat?.ar ?? product.category}
         </p>
         <h3 className="font-cairo font-bold text-drakon-text text-lg mb-2 leading-tight">
           {product.name}

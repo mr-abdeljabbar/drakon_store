@@ -122,7 +122,7 @@ export default function PrivacyPage() {
               إن أردت الوصول إلى بياناتك أو حذفها أو تصحيحها، تواصل معنا مباشرة وسنتعامل مع طلبك بأولوية قصوى.
             </p>
             <a
-              href="https://wa.me/212600000000"
+              href="https://wa.me/2120770757182"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-block bg-gold text-surface-base font-cairo font-bold px-8 py-3 hover:bg-gold-light transition-colors text-sm"
